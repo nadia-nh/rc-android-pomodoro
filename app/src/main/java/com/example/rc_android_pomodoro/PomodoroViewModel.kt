@@ -2,8 +2,10 @@ package com.example.rc_android_pomodoro
 
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 
 class PomodoroViewModel : ViewModel() {
     private val _timeLeft = MutableStateFlow(
@@ -13,9 +15,11 @@ class PomodoroViewModel : ViewModel() {
     private val _isRunning = MutableStateFlow(false)
     private var timer: CountDownTimer? = null
 
-    val timeLeft = _timeLeft.asStateFlow()
-    val totalTime = _totalTime.asStateFlow()
     val isRunning = _isRunning.asStateFlow()
+    val progressLeft: Flow<Float> = combine(_timeLeft, _totalTime) { left, total ->
+        if (total == 0L) 0f
+        else (left.toFloat() / total.toFloat())
+    }
 
     // Update the time display without starting the timer
     fun setCustomTime(minutes: Int) {
@@ -42,7 +46,9 @@ class PomodoroViewModel : ViewModel() {
             override fun onTick(millisUntilFinished: Long) {
                 _timeLeft.value = millisUntilFinished
             }
+
             override fun onFinish() {
+                _timeLeft.value = 0
                 _isRunning.value = false
                 // TODO: Save to Room
             }

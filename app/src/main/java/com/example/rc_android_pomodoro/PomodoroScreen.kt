@@ -33,11 +33,8 @@ fun PomodoroScreen(
     modifier: Modifier = Modifier,
     viewModel: PomodoroViewModel = viewModel(),
     ) {
-    val timeLeft by viewModel.timeLeft.collectAsState()
-    val totalTime by viewModel.totalTime.collectAsState()
     val isRunning by viewModel.isRunning.collectAsState()
-
-    val progressLeft = timeLeft.toFloat() / totalTime.toFloat()
+    val progressLeft by viewModel.progressLeft.collectAsState(1.0f)
 
     // Default to 15 minutes, at index 14
     var sliderIndex by remember { mutableFloatStateOf(14f) }
@@ -54,6 +51,7 @@ fun PomodoroScreen(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.size(250.dp)) {
+
             CircularProgressIndicator(
                 progress = { progressLeft },
                 modifier = Modifier.fillMaxSize(),
