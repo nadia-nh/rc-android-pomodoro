@@ -2,12 +2,16 @@ package com.example.rc_android_pomodoro
 
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rc_android_pomodoro.data.PomodoroSession
+import com.example.rc_android_pomodoro.data.PomodoroSessionDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
-class PomodoroViewModel : ViewModel() {
+class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
     private val _timeLeft = MutableStateFlow(
         (DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE).toLong())
     private val _totalTime = MutableStateFlow(
