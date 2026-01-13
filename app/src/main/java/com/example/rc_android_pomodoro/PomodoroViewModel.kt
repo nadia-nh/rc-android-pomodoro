@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 
 class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
     private val _timeLeft = MutableStateFlow(
-        (DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE).toLong())
+        DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE)
     private val _totalTime = MutableStateFlow(
-        (DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE).toLong())
+        DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE)
     private val _isRunning = MutableStateFlow(false)
     private var timer: CountDownTimer? = null
 
@@ -41,6 +41,19 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
         return (_timeLeft.value / MILLIS_IN_SECOND % 60).toInt()
     }
 
+    fun getTotalMinutes(): Int {
+        return (_totalTime.value / MILLIS_IN_MINUTE).toInt()
+    }
+
+    private fun saveSession(minutes: Int) {
+        viewModelScope.launch {
+            val session = PomodoroSession(
+                duration = minutes,
+                endTime = System.currentTimeMillis())
+            dao.insertSession(session)
+        }
+    }
+
     fun startTimer() {
         _isRunning.value = true
         timer?.cancel()
@@ -54,7 +67,7 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
             override fun onFinish() {
                 _timeLeft.value = 0
                 _isRunning.value = false
-                // TODO: Save to Room
+                saveSession(getTotalMinutes())
             }
         }.start()
     }
