@@ -54,8 +54,8 @@ fun SessionItem(session: PomodoroSession) {
 
 fun formatPomodoroTimestamp(timestamp: Long, duration: Int): String {
     val date = DateUtils.formatTimestampDate(timestamp)
-    val endTime = DateUtils.formatTimestampTime(timestamp)
-    val startTime = DateUtils.formatTimestampTime(
+    val endTime = DateUtils.formatTimestampTimeHours(timestamp)
+    val startTime = DateUtils.formatTimestampTimeHours(
         timestamp - DateUtils.minutesToMillis(duration))
     return "$date $startTime - $endTime"
 }
