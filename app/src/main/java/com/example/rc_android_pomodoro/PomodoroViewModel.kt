@@ -7,8 +7,11 @@ import com.example.rc_android_pomodoro.data.PomodoroSession
 import com.example.rc_android_pomodoro.data.PomodoroSessionDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
@@ -24,6 +27,13 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
         if (total == 0L) 0f
         else (left.toFloat() / total.toFloat())
     }
+
+    val allSessions: StateFlow<List<PomodoroSession>> = dao.getAllSessions()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     // Update the time display without starting the timer
     fun setCustomTime(minutes: Int) {
