@@ -1,5 +1,6 @@
 package com.example.rc_android_pomodoro
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.data.PomodoroSession
-import com.example.rc_android_pomodoro.util.DateUtils
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
-import kotlin.random.Random
+import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 
 @Composable
 fun HistoryScreen(
@@ -55,17 +55,9 @@ fun HistoryScreenStateless(modifier: Modifier = Modifier,
 }
 
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
 fun HistoryScreenPreview() {
-    val nowTimestamp = System.currentTimeMillis()
-    val sessions = (1..20).map {
-        val duration = Random.nextInt(1, 25)
-        PomodoroSession(
-            id = it,
-            duration = duration,
-            endTime = nowTimestamp - DateUtils.minutesToMillis(it * 30)
-        )
-    }.sortedByDescending { it.endTime }
-    HistoryScreenStateless(Modifier, sessions)
+    HistoryScreen(modifier = Modifier, viewModel = TestViewModel())
 }

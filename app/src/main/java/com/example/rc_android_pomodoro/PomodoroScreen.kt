@@ -1,5 +1,6 @@
 package com.example.rc_android_pomodoro
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
+import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 
 @Composable
 fun PomodoroScreen(
@@ -94,7 +96,6 @@ fun PomodoroScreen(
             steps = TimerConfig.sliderNumSteps,
         )
 
-        // Dynamic button, color switches between primary green and error red
         Button(
             onClick = {
                 if (isRunning) viewModel.stopTimer()
@@ -113,10 +114,11 @@ fun PomodoroScreen(
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
 fun PomodoroScreenPreview() {
-    PomodoroScreen()
+    PomodoroScreen(viewModel = TestViewModel())
 }
 
 private object TimerConfig {
