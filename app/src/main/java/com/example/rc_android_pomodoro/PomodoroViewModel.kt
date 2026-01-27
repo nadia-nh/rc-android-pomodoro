@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rc_android_pomodoro.data.PomodoroSession
 import com.example.rc_android_pomodoro.data.PomodoroSessionDao
+import com.example.rc_android_pomodoro.util.DateUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,15 +15,23 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+enum class AppScreen {
+    Main,
+    History
+}
+
 class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
     private val _timeLeft = MutableStateFlow(
-        DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE)
+        DateUtils.minutesToMillis(DEFAULT_DURATION_MINUTES))
     private val _totalTime = MutableStateFlow(
-        DEFAULT_DURATION_MINUTES * MILLIS_IN_MINUTE)
+        DateUtils.minutesToMillis(DEFAULT_DURATION_MINUTES))
     private val _isRunning = MutableStateFlow(false)
     private var timer: CountDownTimer? = null
+    private var _currentScreen = MutableStateFlow(AppScreen.Main)
 
     val isRunning = _isRunning.asStateFlow()
+    val currentScreen = _currentScreen.asStateFlow()
+
     val progressLeft: Flow<Float> = combine(_timeLeft, _totalTime) { left, total ->
         if (total == 0L) 0f
         else (left.toFloat() / total.toFloat())
@@ -38,22 +47,27 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
     // Update the time display without starting the timer
     fun setCustomTime(minutes: Int) {
         if (!_isRunning.value) {
-            _timeLeft.value = minutes * MILLIS_IN_MINUTE
-            _totalTime.value = minutes * MILLIS_IN_MINUTE
+            _timeLeft.value = DateUtils.minutesToMillis(minutes)
+            _totalTime.value = DateUtils.minutesToMillis(minutes)
         }
     }
 
     fun getMinutesLeft(): Int {
-        return (_timeLeft.value / MILLIS_IN_MINUTE).toInt()
+        return DateUtils.millisToMinutes(_timeLeft.value)
     }
 
     fun getSecondsLeft(): Int {
-        return (_timeLeft.value / MILLIS_IN_SECOND % 60).toInt()
+        return DateUtils.millisToSeconds(_timeLeft.value)
     }
 
     fun getTotalMinutes(): Int {
-        return (_totalTime.value / MILLIS_IN_MINUTE).toInt()
+        return DateUtils.millisToMinutes(_totalTime.value)
     }
+
+    fun navigateTo(screen: AppScreen) {
+        _currentScreen.value = screen
+    }
+
 
     private fun saveSession(minutes: Int) {
         viewModelScope.launch {
@@ -69,7 +83,9 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
         timer?.cancel()
 
         val millis = _totalTime.value
-        timer = object : CountDownTimer(millis, MILLIS_IN_SECOND) {
+        timer = object : CountDownTimer(
+            millis,
+            DateUtils.secondsToMillis(1)) {
             override fun onTick(millisUntilFinished: Long) {
                 _timeLeft.value = millisUntilFinished
             }
@@ -90,7 +106,5 @@ class PomodoroViewModel(private val dao: PomodoroSessionDao) : ViewModel() {
 
     private companion object {
         const val DEFAULT_DURATION_MINUTES = 15
-        const val MILLIS_IN_SECOND = 1_000L
-        const val MILLIS_IN_MINUTE = 60 * MILLIS_IN_SECOND
     }
 }
