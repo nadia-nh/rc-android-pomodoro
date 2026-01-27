@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.rc_android_pomodoro.data.PomodoroSession
+import com.example.rc_android_pomodoro.database.PomodoroSession
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 

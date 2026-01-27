@@ -1,4 +1,4 @@
-package com.example.rc_android_pomodoro.data
+package com.example.rc_android_pomodoro.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

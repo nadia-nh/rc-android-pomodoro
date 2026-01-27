@@ -2,7 +2,7 @@ package com.example.rc_android_pomodoro.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rc_android_pomodoro.data.PomodoroSessionDao
+import com.example.rc_android_pomodoro.database.PomodoroSessionDao
 
 class PomodoroViewModelFactory(private val dao: PomodoroSessionDao) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.rc_android_pomodoro.database.PomodoroApplication
 import com.example.rc_android_pomodoro.ui.theme.RCandroidpomodoroTheme
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModelFactory

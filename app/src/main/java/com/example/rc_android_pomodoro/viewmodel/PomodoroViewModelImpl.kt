@@ -3,8 +3,8 @@ package com.example.rc_android_pomodoro.viewmodel
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import com.example.rc_android_pomodoro.data.AppScreen
-import com.example.rc_android_pomodoro.data.PomodoroSession
-import com.example.rc_android_pomodoro.data.PomodoroSessionDao
+import com.example.rc_android_pomodoro.database.PomodoroSession
+import com.example.rc_android_pomodoro.database.PomodoroSessionDao
 import com.example.rc_android_pomodoro.util.DateUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

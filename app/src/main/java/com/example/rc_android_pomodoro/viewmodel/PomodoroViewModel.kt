@@ -2,7 +2,7 @@ package com.example.rc_android_pomodoro.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.rc_android_pomodoro.data.AppScreen
-import com.example.rc_android_pomodoro.data.PomodoroSession
+import com.example.rc_android_pomodoro.database.PomodoroSession
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
