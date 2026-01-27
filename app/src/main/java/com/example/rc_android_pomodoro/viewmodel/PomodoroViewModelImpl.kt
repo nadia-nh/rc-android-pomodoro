@@ -57,6 +57,10 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
         return DateUtils.millisToSeconds(_timeLeft.value)
     }
 
+    override fun getFormattedTimeLeft(): String {
+        return DateUtils.formatTimestampTimeMinutes(_timeLeft.value)
+    }
+
     override fun getTotalMinutes(): Int {
         return DateUtils.millisToMinutes(_totalTime.value)
     }

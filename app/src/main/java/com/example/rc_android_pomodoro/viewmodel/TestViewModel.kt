@@ -28,6 +28,7 @@ class TestViewModel() : PomodoroViewModel() {
     override fun getMinutesLeft() = 15
     override fun getSecondsLeft() = 45
     override fun getTotalMinutes() = 15
+    override fun getFormattedTimeLeft() = "15:45"
 
     override fun navigateTo(screen: AppScreen) {
         Log.d("TestViewModel", "navigateTo called with $screen")

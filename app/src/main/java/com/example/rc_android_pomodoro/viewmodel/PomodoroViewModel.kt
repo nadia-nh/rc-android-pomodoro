@@ -14,6 +14,7 @@ abstract class PomodoroViewModel() : ViewModel() {
     abstract fun setCustomTime(minutes: Int)
     abstract fun getMinutesLeft(): Int
     abstract fun getSecondsLeft(): Int
+    abstract fun getFormattedTimeLeft(): String
     abstract fun getTotalMinutes(): Int
     abstract fun navigateTo(screen: AppScreen)
     abstract fun startTimer()

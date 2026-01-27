@@ -51,8 +51,7 @@ fun PomodoroScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
         PomodoroTimerDisplay(
-            minutes = viewModel.getMinutesLeft(),
-            seconds = viewModel.getSecondsLeft()
+            timeLeftText = viewModel.getFormattedTimeLeft()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -106,11 +105,10 @@ fun PomodoroProgressDisplay(
 
 @Composable
 fun PomodoroTimerDisplay(
-    minutes: Int,
-    seconds: Int
+    timeLeftText: String
 ) {
     Text(
-        text = "%02d:%02d".format(minutes, seconds),
+        text = timeLeftText,
         style = MaterialTheme.typography.displayLarge
     )
 }
@@ -167,7 +165,7 @@ fun PomodoroProgressDisplayPreview() {
 @Preview
 @Composable
 fun PomodoroTimerDisplayPreview() {
-    PomodoroTimerDisplay(minutes = 25, seconds = 45)
+    PomodoroTimerDisplay("25:45")
 }
 
 @Preview
