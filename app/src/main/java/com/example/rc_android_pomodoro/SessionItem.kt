@@ -43,7 +43,8 @@ fun SessionItem(session: PomodoroSession) {
 
                 Text(
                     text = formatPomodoroTimestamp(
-                        session.endTime),
+                        session.endTime,
+                        session.duration),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -51,10 +52,12 @@ fun SessionItem(session: PomodoroSession) {
     }
 }
 
-fun formatPomodoroTimestamp(timestamp: Long): String {
+fun formatPomodoroTimestamp(timestamp: Long, duration: Int): String {
     val date = DateUtils.formatTimestampDate(timestamp)
     val endTime = DateUtils.formatTimestampTime(timestamp)
-    return "$date - $endTime"
+    val startTime = DateUtils.formatTimestampTime(
+        timestamp - DateUtils.minutesToMillis(duration))
+    return "$date $startTime - $endTime"
 }
 
 @Preview
