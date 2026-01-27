@@ -3,6 +3,7 @@ package com.example.rc_android_pomodoro.viewmodel
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import com.example.rc_android_pomodoro.data.AppScreen
+import com.example.rc_android_pomodoro.data.TimerConfig
 import com.example.rc_android_pomodoro.database.PomodoroSession
 import com.example.rc_android_pomodoro.database.PomodoroSessionDao
 import com.example.rc_android_pomodoro.util.DateUtils
@@ -17,10 +18,10 @@ import kotlinx.coroutines.launch
 
 class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewModel() {
     private val _timeLeft = MutableStateFlow(
-        DateUtils.minutesToMillis(DEFAULT_DURATION_MINUTES)
+        DateUtils.minutesToMillis(TimerConfig.DEFAULT_DURATION_MINUTES)
     )
     private val _totalTime = MutableStateFlow(
-        DateUtils.minutesToMillis(DEFAULT_DURATION_MINUTES)
+        DateUtils.minutesToMillis(TimerConfig.DEFAULT_DURATION_MINUTES)
     )
     private val _isRunning = MutableStateFlow(false)
     private var timer: CountDownTimer? = null
@@ -104,9 +105,5 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
         timer?.cancel()
         _isRunning.value = false
         _timeLeft.value = _totalTime.value
-    }
-
-    private companion object {
-        const val DEFAULT_DURATION_MINUTES = 15
     }
 }

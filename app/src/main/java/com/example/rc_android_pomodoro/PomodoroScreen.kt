@@ -56,14 +56,13 @@ fun PomodoroScreen(
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-        // Default to 15 minutes, at index 14
-        var sliderIndex by remember { mutableFloatStateOf(14f) }
+        var sliderIndex by remember {
+            mutableFloatStateOf(TimerConfig.DEFAULT_DURATION_INDEX) }
         PomodoroTimeInput(
             index = sliderIndex,
             isRunning = isRunning,
             onValueChange = {
                 sliderIndex = it
-                // Pass the mapped minutes to the viewModel
                 viewModel.setCustomTime(TimerConfig.durations[it.toInt()])
             }
         )

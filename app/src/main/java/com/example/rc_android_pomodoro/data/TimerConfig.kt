@@ -13,4 +13,7 @@ object TimerConfig {
     val sliderNumSteps = durations.size - 2
 
     val maxIndex = (durations.size - 1).toFloat()
+
+    const val DEFAULT_DURATION_MINUTES = 15
+    const val DEFAULT_DURATION_INDEX = 14f
 }
