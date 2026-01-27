@@ -39,9 +39,6 @@ fun PomodoroScreen(
     val isRunning by viewModel.isRunning.collectAsState()
     val progressLeft by viewModel.progressLeft.collectAsState(1.0f)
 
-    // Default to 15 minutes, at index 14
-    var sliderIndex by remember { mutableFloatStateOf(14f) }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -50,67 +47,107 @@ fun PomodoroScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Circular progress display
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(250.dp)) {
-
-            CircularProgressIndicator(
-                progress = { progressLeft },
-                modifier = Modifier.fillMaxSize(),
-                strokeWidth = 8.dp,
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
-            )
-            
-            // Change icon based on progress
-            val progress = 1 - progressLeft
-            val sproutIcon = when {
-                progress < 0.3f -> "🌱"
-                progress < 0.9f -> "🌿"
-                else -> "🌸"
-            }
-            Text(text = sproutIcon, fontSize = 64.sp)
-        }
+        PomodoroProgressDisplay(progressLeft = progressLeft)
 
         Spacer(modifier = Modifier.height(32.dp))
-
-        Text(
-            text = "%02d:%02d".format(
-                viewModel.getMinutesLeft(), viewModel.getSecondsLeft()),
-            style = MaterialTheme.typography.displayLarge
+        PomodoroTimerDisplay(
+            minutes = viewModel.getMinutesLeft(),
+            seconds = viewModel.getSecondsLeft()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-
-        // Customization Slider
-        Slider(
-            value = sliderIndex,
-            enabled = !isRunning,
+        // Default to 15 minutes, at index 14
+        var sliderIndex by remember { mutableFloatStateOf(14f) }
+        PomodoroTimeInput(
+            index = sliderIndex,
+            isRunning = isRunning,
             onValueChange = {
                 sliderIndex = it
                 // Pass the mapped minutes to the viewModel
                 viewModel.setCustomTime(TimerConfig.durations[it.toInt()])
-            },
-            valueRange = 0f..TimerConfig.maxIndex,
-            steps = TimerConfig.sliderNumSteps,
+            }
         )
 
-        Button(
-            onClick = {
-                if (isRunning) viewModel.stopTimer()
-                else viewModel.startTimer()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (isRunning) {
-                    MaterialTheme.colorScheme.error 
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
-            )
-        ) {
-            Text(if (isRunning) "Stop Pomodoro" else "Start Pomodoro")
+        PomodoroButton(
+            isRunning = isRunning,
+            onStart = { viewModel.startTimer() },
+            onStop = { viewModel.stopTimer() }
+        )
+    }
+}
+
+@Composable
+fun PomodoroProgressDisplay(
+    progressLeft: Float
+) {
+    // Circular progress display
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(250.dp)) {
+
+        CircularProgressIndicator(
+            progress = { progressLeft },
+            modifier = Modifier.fillMaxSize(),
+            strokeWidth = 8.dp,
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
+        )
+
+        // Change icon based on progress
+        val progress = 1 - progressLeft
+        val sproutIcon = when {
+            progress < 0.3f -> "🌱"
+            progress < 0.9f -> "🌿"
+            else -> "🌸"
         }
+        Text(text = sproutIcon, fontSize = 64.sp)
+    }
+}
+
+@Composable
+fun PomodoroTimerDisplay(
+    minutes: Int,
+    seconds: Int
+) {
+    Text(
+        text = "%02d:%02d".format(minutes, seconds),
+        style = MaterialTheme.typography.displayLarge
+    )
+}
+
+@Composable
+fun PomodoroTimeInput(
+    index: Float,
+    isRunning: Boolean,
+    onValueChange: (Float) -> Unit,
+) {
+    // Customization Slider
+    Slider(
+        value = index,
+        enabled = !isRunning,
+        onValueChange = { onValueChange(it) },
+        valueRange = 0f..TimerConfig.maxIndex,
+        steps = TimerConfig.sliderNumSteps,
+    )
+}
+
+@Composable
+fun PomodoroButton(
+    isRunning: Boolean = false,
+    onStart: () -> Unit = {},
+    onStop: () -> Unit = {}
+) {
+    Button(
+        onClick = { if (isRunning) onStop() else onStart() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isRunning) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.primary
+            }
+        )
+    ) {
+        Text(if (isRunning) "Stop Pomodoro" else "Start Pomodoro")
     }
 }
 
@@ -119,6 +156,30 @@ fun PomodoroScreen(
 @Composable
 fun PomodoroScreenPreview() {
     PomodoroScreen(viewModel = TestViewModel())
+}
+
+@Preview
+@Composable
+fun PomodoroProgressDisplayPreview() {
+    PomodoroProgressDisplay(progressLeft = 0.3f)
+}
+
+@Preview
+@Composable
+fun PomodoroTimerDisplayPreview() {
+    PomodoroTimerDisplay(minutes = 25, seconds = 45)
+}
+
+@Preview
+@Composable
+fun PomodoroTimeInputPreview() {
+    PomodoroTimeInput(index = 14f, isRunning = false, onValueChange = {})
+}
+
+@Preview
+@Composable
+fun PomodoroButtonPreview() {
+    PomodoroButton(isRunning = true, onStart = {}, onStop = {})
 }
 
 private object TimerConfig {
