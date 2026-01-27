@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.rc_android_pomodoro.data.AppScreen
+import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 
 @Composable
 fun PomodoroMain(viewModel: PomodoroViewModel) {

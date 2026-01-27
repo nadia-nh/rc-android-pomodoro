@@ -15,14 +15,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.data.PomodoroSession
 import com.example.rc_android_pomodoro.util.DateUtils
+import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import kotlin.random.Random
 
 @Composable
 fun HistoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: PomodoroViewModel) {
+    viewModel: PomodoroViewModel = viewModel()) {
     val sessions by viewModel.allSessions.collectAsState()
     HistoryScreenStateless(modifier = modifier, sessions = sessions)
 }

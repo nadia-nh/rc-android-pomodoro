@@ -1,4 +1,4 @@
-package com.example.rc_android_pomodoro
+package com.example.rc_android_pomodoro.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,7 +8,7 @@ class PomodoroViewModelFactory(private val dao: PomodoroSessionDao) : ViewModelP
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PomodoroViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PomodoroViewModel(dao) as T
+            return PomodoroViewModelImpl(dao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
