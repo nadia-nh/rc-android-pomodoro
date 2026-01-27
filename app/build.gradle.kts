@@ -65,6 +65,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     androidTestImplementation(libs.androidx.room.testing)
 
+    // Extra icons
+    implementation(libs.androidx.compose.material.icons.extended)
+
     // Testing components
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
