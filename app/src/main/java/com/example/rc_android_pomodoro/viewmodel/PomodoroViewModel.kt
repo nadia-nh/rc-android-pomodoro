@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class PomodoroViewModel() : ViewModel() {
-    abstract val isRunning : StateFlow<Boolean>
-    abstract val currentScreen : StateFlow<AppScreen>
+    abstract val isRunning: StateFlow<Boolean>
+    abstract val isSaving: StateFlow<Boolean>
+    abstract val currentScreen: StateFlow<AppScreen>
     abstract val progressLeft: Flow<Float>
     abstract val allSessions: StateFlow<List<PomodoroSession>>
     abstract fun setCustomTime(minutes: Int)

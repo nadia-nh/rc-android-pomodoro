@@ -21,6 +21,7 @@ class TestViewModel() : PomodoroViewModel() {
     }.sortedByDescending { it.endTime }
 
     override val isRunning: StateFlow<Boolean> = MutableStateFlow(false)
+    override val isSaving: StateFlow<Boolean> = MutableStateFlow(false)
     override val currentScreen: StateFlow<AppScreen> = MutableStateFlow(AppScreen.Main)
     override val progressLeft: Flow<Float> = MutableStateFlow(0.7f)
     override val allSessions: StateFlow<List<PomodoroSession>> = MutableStateFlow(sessions)

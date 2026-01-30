@@ -24,13 +24,16 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
         DateUtils.minutesToMillis(TimerConfig.DEFAULT_DURATION_MINUTES)
     )
     private val _isRunning = MutableStateFlow(false)
+    private val _isSaving = MutableStateFlow(false)
     private var timer: CountDownTimer? = null
     private var _currentScreen = MutableStateFlow(AppScreen.Main)
 
     override val isRunning = _isRunning.asStateFlow()
+    override val isSaving = _isSaving.asStateFlow()
     override val currentScreen = _currentScreen.asStateFlow()
 
-    override val progressLeft: Flow<Float> = combine(_timeLeft, _totalTime) { left, total ->
+    override val progressLeft: Flow<Float> = combine(
+        _timeLeft, _totalTime) { left, total ->
         if (total == 0L) 0f
         else (left.toFloat() / total.toFloat())
     }
@@ -72,11 +75,13 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
 
     private fun saveSession(minutes: Int) {
         viewModelScope.launch {
+            _isSaving.value = true
             val session = PomodoroSession(
                 duration = minutes,
                 endTime = System.currentTimeMillis()
             )
             dao.insertSession(session)
+            _isSaving.value = false
         }
     }
 
@@ -94,7 +99,7 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
             }
 
             override fun onFinish() {
-                _timeLeft.value = 0
+                _timeLeft.value = _totalTime.value
                 _isRunning.value = false
                 saveSession(getTotalMinutes())
             }

@@ -38,6 +38,7 @@ fun PomodoroScreen(
     viewModel: PomodoroViewModel = viewModel(),
     ) {
     val isRunning by viewModel.isRunning.collectAsState()
+    val isSaving by viewModel.isSaving.collectAsState()
     val progressLeft by viewModel.progressLeft.collectAsState(1.0f)
 
     Column(
@@ -52,7 +53,7 @@ fun PomodoroScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
         PomodoroTimerDisplay(
-            timeLeftText = viewModel.getFormattedTimeLeft()
+            timerText = if (isSaving) "Saving..." else viewModel.getFormattedTimeLeft()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -105,10 +106,10 @@ fun PomodoroProgressDisplay(
 
 @Composable
 fun PomodoroTimerDisplay(
-    timeLeftText: String
+    timerText: String
 ) {
     Text(
-        text = timeLeftText,
+        text = timerText,
         style = MaterialTheme.typography.displayLarge
     )
 }
