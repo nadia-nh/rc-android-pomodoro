@@ -49,11 +49,10 @@ fun PomodoroScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        PomodoroProgressDisplay(progressLeft = progressLeft)
-
-        Spacer(modifier = Modifier.height(32.dp))
-        PomodoroTimerDisplay(
-            timerText = if (isSaving) "Saving..." else viewModel.getFormattedTimeLeft()
+        val timerText = if (isSaving) "Saving..." else viewModel.getFormattedTimeLeft()
+        PomodoroProgressDisplay(
+            progressLeft = progressLeft,
+            timerText = timerText
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -76,14 +75,26 @@ fun PomodoroScreen(
     }
 }
 
+private fun getProgressIcon(progressLeft: Float) : String {
+    val progress = 1 - progressLeft
+    return when {
+        progress < 0.3f -> "🌱"
+        progress < 0.9f -> "🌿"
+        else -> "🌸"
+    }
+}
+
 @Composable
 fun PomodoroProgressDisplay(
-    progressLeft: Float
+    progressLeft: Float,
+    timerText: String? = null,
+    isLandscape: Boolean = false
 ) {
     // Circular progress display
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.size(250.dp)) {
+        modifier = Modifier.size(250.dp)
+    ) {
 
         CircularProgressIndicator(
             progress = { progressLeft },
@@ -93,14 +104,20 @@ fun PomodoroProgressDisplay(
             trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
         )
 
-        // Change icon based on progress
-        val progress = 1 - progressLeft
-        val sproutIcon = when {
-            progress < 0.3f -> "🌱"
-            progress < 0.9f -> "🌿"
-            else -> "🌸"
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val sproutIcon = getProgressIcon(progressLeft)
+            Text(text = sproutIcon, fontSize = 48.sp)
+
+            if (isLandscape && timerText != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                PomodoroTimerDisplay(timerText)
+            }
         }
-        Text(text = sproutIcon, fontSize = 64.sp)
+    }
+
+    if (!isLandscape && timerText != null) {
+        Spacer(modifier = Modifier.height(32.dp))
+        PomodoroTimerDisplay(timerText = timerText)
     }
 }
 
@@ -160,7 +177,10 @@ fun PomodoroScreenPreview() {
 @Preview
 @Composable
 fun PomodoroProgressDisplayPreview() {
-    PomodoroProgressDisplay(progressLeft = 0.3f)
+    PomodoroProgressDisplay(
+        progressLeft = 0.3f,
+        timerText = "25:45",
+        isLandscape = true)
 }
 
 @Preview
