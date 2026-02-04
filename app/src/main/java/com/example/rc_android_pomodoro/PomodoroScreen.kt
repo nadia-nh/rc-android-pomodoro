@@ -10,12 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalSlider
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +38,7 @@ import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 import com.example.rc_android_pomodoro.data.TimerConfig
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PomodoroScreen(
     modifier: Modifier = Modifier,
@@ -58,13 +65,20 @@ fun PomodoroScreen(
         Spacer(modifier = Modifier.height(24.dp))
         var sliderIndex by remember {
             mutableFloatStateOf(TimerConfig.DEFAULT_DURATION_INDEX) }
+        val sliderState = rememberSliderState(
+            value = sliderIndex,
+            valueRange = 0f..TimerConfig.maxIndex,
+            steps = TimerConfig.sliderNumSteps,
+        )
+        sliderState.onValueChange = {
+            sliderIndex = it
+            sliderState.value = sliderIndex
+            viewModel.setCustomTime(TimerConfig.durations[it.toInt()])
+        }
+
         PomodoroTimeInput(
-            index = sliderIndex,
+            sliderState = sliderState,
             isRunning = isRunning,
-            onValueChange = {
-                sliderIndex = it
-                viewModel.setCustomTime(TimerConfig.durations[it.toInt()])
-            }
         )
 
         PomodoroButton(
@@ -131,20 +145,32 @@ fun PomodoroTimerDisplay(
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalMaterial3Api::class)
 @Composable
 fun PomodoroTimeInput(
-    index: Float,
+    sliderState: SliderState,
     isRunning: Boolean,
-    onValueChange: (Float) -> Unit,
+    isLandscape: Boolean = false,
 ) {
-    // Customization Slider
-    Slider(
-        value = index,
-        enabled = !isRunning,
-        onValueChange = { onValueChange(it) },
-        valueRange = 0f..TimerConfig.maxIndex,
-        steps = TimerConfig.sliderNumSteps,
-    )
+    if (isLandscape) {
+        VerticalSlider(
+            state = sliderState,
+            modifier = Modifier
+                .height(200.dp)
+                .width(50.dp),
+            enabled = !isRunning,
+            reverseDirection = true,
+        )
+    } else {
+        Slider(
+            state = sliderState,
+            modifier = Modifier
+                .height(50.dp)
+                .width(200.dp),
+            enabled = !isRunning,
+        )
+    }
 }
 
 @Composable
@@ -189,10 +215,19 @@ fun PomodoroTimerDisplayPreview() {
     PomodoroTimerDisplay("25:45")
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun PomodoroTimeInputPreview() {
-    PomodoroTimeInput(index = 14f, isRunning = false, onValueChange = {})
+    val sliderState = rememberSliderState(
+        value = TimerConfig.DEFAULT_DURATION_INDEX,
+        valueRange = 0f..TimerConfig.maxIndex,
+        steps = TimerConfig.sliderNumSteps,
+    )
+    PomodoroTimeInput(
+        sliderState = sliderState,
+        isRunning = false,
+        isLandscape = true)
 }
 
 @Preview
