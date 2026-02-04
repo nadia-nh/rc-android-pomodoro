@@ -1,10 +1,12 @@
 package com.example.rc_android_pomodoro
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -27,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,29 +49,59 @@ fun PomodoroScreen(
     val progressLeft by viewModel.progressLeft.collectAsState(1.0f)
     val timeLeft by viewModel.timeLeft.collectAsState(initial = DateUtils.minutesToMillis(15))
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        val timeLeftText = DateUtils.formatTimestampTimeMinutes(timeLeft)
-        val timerText = if (isSaving) "Saving..." else timeLeftText
-        PomodoroDisplayAndButton(
-            isRunning = isRunning,
-            progressLeft = progressLeft,
-            timerText = timerText,
-            onStart = { viewModel.startTimer() },
-            onStop = { viewModel.stopTimer() }
-        )
+    val orientation = LocalConfiguration.current.orientation
+    val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
+    val pomodoroModifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
+        .padding(16.dp)
+    val timeLeftText = DateUtils.formatTimestampTimeMinutes(timeLeft)
+    val timerText = if (isSaving) "Saving..." else timeLeftText
 
-        Spacer(modifier = Modifier.height(24.dp))
-        PomodoroInputSlider(
-            isRunning = isRunning,
-            onValueChange = {viewModel.setCustomTime(TimerConfig.durations[it.toInt()])}
-        )
+    if (isLandscape) {
+        Row(
+            modifier = pomodoroModifier,
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PomodoroDisplayAndButton(
+                isRunning = isRunning,
+                isLandscape = true,
+                progressLeft = progressLeft,
+                timerText = timerText,
+                onStart = { viewModel.startTimer() },
+                onStop = { viewModel.stopTimer() }
+            )
+
+            Spacer(modifier = Modifier.width(48.dp))
+            PomodoroInputSlider(
+                isRunning = isRunning,
+                isLandscape = true,
+                onValueChange = { viewModel.setCustomTime(TimerConfig.durations[it.toInt()]) }
+            )
+        }
+    } else {
+        Column(
+            modifier = pomodoroModifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            PomodoroDisplayAndButton(
+                isRunning = isRunning,
+                isLandscape = false,
+                progressLeft = progressLeft,
+                timerText = timerText,
+                onStart = { viewModel.startTimer() },
+                onStop = { viewModel.stopTimer() }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+            PomodoroInputSlider(
+                isRunning = isRunning,
+                isLandscape = false,
+                onValueChange = { viewModel.setCustomTime(TimerConfig.durations[it.toInt()]) }
+            )
+        }
     }
 }
 
