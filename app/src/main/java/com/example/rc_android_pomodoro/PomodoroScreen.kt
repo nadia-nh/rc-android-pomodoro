@@ -37,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 import com.example.rc_android_pomodoro.data.TimerConfig
+import com.example.rc_android_pomodoro.util.DateUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +48,7 @@ fun PomodoroScreen(
     val isRunning by viewModel.isRunning.collectAsState()
     val isSaving by viewModel.isSaving.collectAsState()
     val progressLeft by viewModel.progressLeft.collectAsState(1.0f)
+    val timeLeft by viewModel.timeLeft.collectAsState(initial = DateUtils.minutesToMillis(15))
 
     Column(
         modifier = modifier
@@ -56,7 +58,8 @@ fun PomodoroScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val timerText = if (isSaving) "Saving..." else viewModel.getFormattedTimeLeft()
+        val timeLeftText = DateUtils.formatTimestampTimeMinutes(timeLeft)
+        val timerText = if (isSaving) "Saving..." else timeLeftText
         PomodoroProgressDisplay(
             progressLeft = progressLeft,
             timerText = timerText

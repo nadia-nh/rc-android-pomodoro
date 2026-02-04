@@ -11,11 +11,11 @@ abstract class PomodoroViewModel() : ViewModel() {
     abstract val isSaving: StateFlow<Boolean>
     abstract val currentScreen: StateFlow<AppScreen>
     abstract val progressLeft: Flow<Float>
+    abstract val timeLeft: Flow<Long>
     abstract val allSessions: StateFlow<List<PomodoroSession>>
     abstract fun setCustomTime(minutes: Int)
     abstract fun getMinutesLeft(): Int
     abstract fun getSecondsLeft(): Int
-    abstract fun getFormattedTimeLeft(): String
     abstract fun getTotalMinutes(): Int
     abstract fun navigateTo(screen: AppScreen)
     abstract fun startTimer()

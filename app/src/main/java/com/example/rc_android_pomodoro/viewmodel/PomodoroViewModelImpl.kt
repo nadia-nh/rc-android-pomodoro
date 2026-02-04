@@ -38,6 +38,8 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
         else (left.toFloat() / total.toFloat())
     }
 
+    override val timeLeft: Flow<Long> = _timeLeft.asStateFlow()
+
     override val allSessions: StateFlow<List<PomodoroSession>> = dao.getAllSessions()
         .stateIn(
             scope = viewModelScope,
@@ -59,10 +61,6 @@ class PomodoroViewModelImpl(private val dao: PomodoroSessionDao) : PomodoroViewM
 
     override fun getSecondsLeft(): Int {
         return DateUtils.millisToSeconds(_timeLeft.value)
-    }
-
-    override fun getFormattedTimeLeft(): String {
-        return DateUtils.formatTimestampTimeMinutes(_timeLeft.value)
     }
 
     override fun getTotalMinutes(): Int {

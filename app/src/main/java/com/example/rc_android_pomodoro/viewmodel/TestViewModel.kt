@@ -24,12 +24,13 @@ class TestViewModel() : PomodoroViewModel() {
     override val isSaving: StateFlow<Boolean> = MutableStateFlow(false)
     override val currentScreen: StateFlow<AppScreen> = MutableStateFlow(AppScreen.Main)
     override val progressLeft: Flow<Float> = MutableStateFlow(0.7f)
+    override val timeLeft: Flow<Long> = MutableStateFlow(
+        DateUtils.minutesToMillis(15))
     override val allSessions: StateFlow<List<PomodoroSession>> = MutableStateFlow(sessions)
 
     override fun getMinutesLeft() = 15
     override fun getSecondsLeft() = 45
     override fun getTotalMinutes() = 15
-    override fun getFormattedTimeLeft() = "15:45"
 
     override fun navigateTo(screen: AppScreen) {
         Log.d("TestViewModel", "navigateTo called with $screen")
