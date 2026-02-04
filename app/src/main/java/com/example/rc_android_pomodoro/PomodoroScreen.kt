@@ -63,6 +63,13 @@ fun PomodoroScreen(
         )
 
         Spacer(modifier = Modifier.height(24.dp))
+        PomodoroButton(
+            isRunning = isRunning,
+            onStart = { viewModel.startTimer() },
+            onStop = { viewModel.stopTimer() }
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
         var sliderIndex by remember {
             mutableFloatStateOf(TimerConfig.DEFAULT_DURATION_INDEX) }
         val sliderState = rememberSliderState(
@@ -79,12 +86,6 @@ fun PomodoroScreen(
         PomodoroTimeInput(
             sliderState = sliderState,
             isRunning = isRunning,
-        )
-
-        PomodoroButton(
-            isRunning = isRunning,
-            onStart = { viewModel.startTimer() },
-            onStop = { viewModel.stopTimer() }
         )
     }
 }
