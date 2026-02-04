@@ -60,14 +60,10 @@ fun PomodoroScreen(
     ) {
         val timeLeftText = DateUtils.formatTimestampTimeMinutes(timeLeft)
         val timerText = if (isSaving) "Saving..." else timeLeftText
-        PomodoroProgressDisplay(
-            progressLeft = progressLeft,
-            timerText = timerText
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-        PomodoroButton(
+        PomodoroDisplayAndButton(
             isRunning = isRunning,
+            progressLeft = progressLeft,
+            timerText = timerText,
             onStart = { viewModel.startTimer() },
             onStop = { viewModel.stopTimer() }
         )
@@ -89,6 +85,33 @@ fun PomodoroScreen(
         PomodoroTimeInput(
             sliderState = sliderState,
             isRunning = isRunning,
+        )
+    }
+}
+
+@Composable
+fun PomodoroDisplayAndButton(
+    isRunning: Boolean,
+    isLandscape: Boolean = false,
+    progressLeft: Float,
+    timerText: String? = null,
+    onStart: () -> Unit = {},
+    onStop: () -> Unit = {}
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+        PomodoroProgressDisplay(
+            progressLeft = progressLeft,
+            timerText = timerText,
+            isLandscape = isLandscape
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+        PomodoroButton(
+            isRunning = isRunning,
+            onStart = { onStart() },
+            onStop = { onStop() }
         )
     }
 }
@@ -202,6 +225,16 @@ fun PomodoroButton(
 @Composable
 fun PomodoroScreenPreview() {
     PomodoroScreen(viewModel = TestViewModel())
+}
+
+@Preview
+@Composable
+fun PomodoroDisplayAndButtonPreview() {
+    PomodoroDisplayAndButton(
+        isRunning = false,
+        progressLeft = 0.3f,
+        timerText = "25:45"
+    )
 }
 
 @Preview
