@@ -57,6 +57,10 @@ fun PomodoroScreen(
         .padding(16.dp)
     val timeLeftText = DateUtils.formatTimestampTimeMinutes(timeLeft)
     val timerText = if (isSaving) "Saving..." else timeLeftText
+    val onStart = { viewModel.startTimer() }
+    val onStop = { viewModel.stopTimer() }
+    val onValueChange = { it: Float -> viewModel.setCustomTime(TimerConfig.durations[it.toInt()]) }
+
 
     if (isLandscape) {
         Row(
@@ -69,15 +73,15 @@ fun PomodoroScreen(
                 isLandscape = true,
                 progressLeft = progressLeft,
                 timerText = timerText,
-                onStart = { viewModel.startTimer() },
-                onStop = { viewModel.stopTimer() }
+                onStart = onStart,
+                onStop = onStop
             )
 
             Spacer(modifier = Modifier.width(48.dp))
             PomodoroInputSlider(
                 isRunning = isRunning,
                 isLandscape = true,
-                onValueChange = { viewModel.setCustomTime(TimerConfig.durations[it.toInt()]) }
+                onValueChange = onValueChange
             )
         }
     } else {
@@ -91,15 +95,15 @@ fun PomodoroScreen(
                 isLandscape = false,
                 progressLeft = progressLeft,
                 timerText = timerText,
-                onStart = { viewModel.startTimer() },
-                onStop = { viewModel.stopTimer() }
+                onStart = onStart,
+                onStop = onStop
             )
 
             Spacer(modifier = Modifier.height(24.dp))
             PomodoroInputSlider(
                 isRunning = isRunning,
                 isLandscape = false,
-                onValueChange = { viewModel.setCustomTime(TimerConfig.durations[it.toInt()]) }
+                onValueChange = onValueChange
             )
         }
     }
@@ -216,6 +220,7 @@ fun PomodoroTimerDisplay(
     ExperimentalMaterial3Api::class)
 @Composable
 fun PomodoroTimeInput(
+    modifier: Modifier = Modifier,
     sliderState: SliderState,
     isRunning: Boolean,
     isLandscape: Boolean = false,
@@ -223,18 +228,14 @@ fun PomodoroTimeInput(
     if (isLandscape) {
         VerticalSlider(
             state = sliderState,
-            modifier = Modifier
-                .height(200.dp)
-                .width(50.dp),
+            modifier = modifier,
             enabled = !isRunning,
             reverseDirection = true,
         )
     } else {
         Slider(
             state = sliderState,
-            modifier = Modifier
-                .height(50.dp)
-                .width(200.dp),
+            modifier = modifier,
             enabled = !isRunning,
         )
     }
