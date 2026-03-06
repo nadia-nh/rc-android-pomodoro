@@ -2,7 +2,7 @@
 
 <img width="640" height="270" alt="pomodoro timer screenshot" src="screenshot-rc-pomodoro.png" />
 
-Android Pomodoro timer app built at [The Recurse Center](https://recurse.com/) using Jetpack Compose to learn Android development.
+Android Pomodoro timer app built at [The Recurse Center](https://recurse.com/) using Jetpack Compose as a personal project.
 
 The app features a circular progress timer with start/stop controls and adjustable duration via a slider. Sessions are saved to a local database so you can track your focus history.
 
