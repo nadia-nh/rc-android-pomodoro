@@ -1,16 +1,16 @@
 [versions]
 agp = "9.0.1"
-kotlin = "2.3.0"
+kotlin = "2.3.21"
 ksp = "2.3.2"
-coreKtx = "1.17.0"
+coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.3"
-composeBom = "2026.01.01"
+activityCompose = "1.13.0"
+composeBom = "2026.04.01"
 lifecycleViewmodelCompose = "2.10.0"
-material3Android = "1.5.0-alpha13"
+material3Android = "1.5.0-alpha18"
 roomVersion = "2.8.4"
 
 [libraries]
