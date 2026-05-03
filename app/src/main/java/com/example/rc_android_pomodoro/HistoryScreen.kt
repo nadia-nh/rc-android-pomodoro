@@ -1,6 +1,7 @@
 package com.example.rc_android_pomodoro
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.database.PomodoroSession
+import com.example.rc_android_pomodoro.ui.theme.RCandroidpomodoroTheme
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 
@@ -56,8 +59,18 @@ fun HistoryScreenStateless(modifier: Modifier = Modifier,
 
 
 @SuppressLint("ViewModelConstructorInComposable")
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HistoryScreenPreview() {
-    HistoryScreen(modifier = Modifier, viewModel = TestViewModel())
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            HistoryScreen(
+                modifier = Modifier,
+                viewModel = TestViewModel()
+            )
+        }
+    }
 }
