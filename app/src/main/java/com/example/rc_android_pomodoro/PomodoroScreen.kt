@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rc_android_pomodoro.viewmodel.PomodoroViewModel
 import com.example.rc_android_pomodoro.viewmodel.TestViewModel
 import com.example.rc_android_pomodoro.data.TimerConfig
+import com.example.rc_android_pomodoro.ui.theme.RCandroidpomodoroTheme
 import com.example.rc_android_pomodoro.util.DateUtils
 
 @Composable
@@ -262,47 +264,79 @@ fun PomodoroButton(
 }
 
 @SuppressLint("ViewModelConstructorInComposable")
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroScreenPreview() {
-    PomodoroScreen(viewModel = TestViewModel())
+    RCandroidpomodoroTheme {
+        PomodoroScreen(viewModel = TestViewModel())
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroDisplayAndButtonPreview() {
-    PomodoroDisplayAndButton(
-        isRunning = false,
-        progressLeft = 0.3f,
-        timerText = "25:45"
-    )
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroDisplayAndButton(
+                isRunning = false,
+                progressLeft = 0.3f,
+                timerText = "25:45"
+            )
+        }
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroInputSliderPreview() {
-    PomodoroInputSlider(
-        isRunning = false,
-        isLandscape = true)
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroInputSlider(
+                isRunning = false,
+                isLandscape = true
+            )
+        }
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroProgressDisplayPreview() {
-    PomodoroProgressDisplay(
-        progressLeft = 0.3f,
-        timerText = "25:45",
-        isLandscape = true)
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroProgressDisplay(
+                progressLeft = 0.3f,
+                timerText = "25:45",
+                isLandscape = true
+            )
+        }
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroTimerDisplayPreview() {
-    PomodoroTimerDisplay("25:45")
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroTimerDisplay("25:45")
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroTimeInputPreview() {
     val sliderState = rememberSliderState(
@@ -310,14 +344,32 @@ fun PomodoroTimeInputPreview() {
         valueRange = 0f..TimerConfig.maxIndex,
         steps = TimerConfig.sliderNumSteps,
     )
-    PomodoroTimeInput(
-        sliderState = sliderState,
-        isRunning = false,
-        isLandscape = true)
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroTimeInput(
+                sliderState = sliderState,
+                isRunning = false,
+                isLandscape = true
+            )
+        }
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PomodoroButtonPreview() {
-    PomodoroButton(isRunning = true, onStart = {}, onStop = {})
+    RCandroidpomodoroTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PomodoroButton(
+                isRunning = true,
+                onStart = {},
+                onStop = {})
+        }
+    }
 }
